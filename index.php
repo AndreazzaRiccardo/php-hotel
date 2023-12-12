@@ -43,6 +43,17 @@ for ($i = 0; $i < count($hotels); $i++) {
     $hotels[$i]['distance_to_center'] .= ' km';
     $hotels[$i]['parking'] = $hotels[$i]['parking'] ? 'Yes' : 'No';
 }
+
+function filterHotels($parking_value, $vote_value)
+{
+    if (empty($_GET['vote']) && empty($_GET['parking'])) {
+        return '';
+    } elseif ($parking_value != $_GET['parking'] && !empty($_GET['parking'])) {
+        return 'd-none';
+    } elseif ($vote_value < $_GET['vote']) {
+        return 'd-none';
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -64,14 +75,14 @@ for ($i = 0; $i < count($hotels); $i++) {
 <body>
     <div class="container">
 
-        <h2 class="text-center">Filters</h2>
+        <h2 class="text-center mb-4 mt-4">Filters</h2>
         <form class="d-flex justify-content-around align-items-end" action="index.php">
             <div>
                 <label for="parking">Filter for parking</label>
                 <select class="form-select form-select-sm" name="parking" id="parking">
                     <option value=""></option>
-                    <option value="1">Yes</option>
-                    <option value="0">No</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
                 </select>
             </div>
             <div>
@@ -84,7 +95,7 @@ for ($i = 0; $i < count($hotels); $i++) {
 
                 </select>
             </div>
-            <button class="btn btn-primary" type="submit">FILTER</button>
+            <button class="btn btn-dark" type="submit">FILTER</button>
         </form>
 
         <hr class="m-5">
@@ -100,7 +111,7 @@ for ($i = 0; $i < count($hotels); $i++) {
             </thead>
             <tbody>
                 <?php foreach ($hotels as $i => $hotel) { ?>
-                    <tr>
+                    <tr class="<?php echo filterHotels($hotel['parking'], $hotel['vote']); ?>">
                         <th scope="row"><?php echo $i ?></th>
                         <?php foreach ($hotel as $value) { ?>
                             <td><?php echo $value; ?></td>
