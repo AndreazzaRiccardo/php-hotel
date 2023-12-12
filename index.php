@@ -1,4 +1,5 @@
 <?php
+
 $hotels = [
 
     [
@@ -37,6 +38,11 @@ $hotels = [
         'distance_to_center' => 50
     ],
 ];
+
+for ($i = 0; $i < count($hotels); $i++) {
+    $hotels[$i]['distance_to_center'] .= ' km';
+    $hotels[$i]['parking'] = $hotels[$i]['parking'] ? 'Yes' : 'No';
+}
 ?>
 
 <!DOCTYPE html>
@@ -56,32 +62,55 @@ $hotels = [
 </head>
 
 <body>
+    <div class="container">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">HOTELS</th>
-                <th scope="col">Name</th>
-                <th scope="col">Description</th>
-                <th scope="col">Parking</th>
-                <th scope="col">Vote</th>
-                <th scope="col">Distance to center</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($hotels as $i => $hotel) { ?>
+        <h2 class="text-center">Filters</h2>
+        <form class="d-flex justify-content-around align-items-end" action="index.php">
+            <div>
+                <label for="parking">Filter for parking</label>
+                <select class="form-select form-select-sm" name="parking" id="parking">
+                    <option value=""></option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            <div>
+                <label for="vote">Filter for vote</label>
+                <select class="form-select form-select-sm" name="vote" id="vote">
+                    <option value=""></option>
+                    <?php for ($i = 1; $i <= 5; $i++) { ?>
+                        <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                    <?php } ?>
+
+                </select>
+            </div>
+            <button class="btn btn-primary" type="submit">FILTER</button>
+        </form>
+
+        <hr class="m-5">
+
+        <table class="table table-hover">
+            <thead>
                 <tr>
-                    <th scope="row"><?php echo $i ?></th>
-                    <td><?php echo $hotel['name']; ?></td>
-                    <td><?php echo $hotel['description']; ?></td>
-                    <td><?php echo ($hotel['parking']) ? 'Yes' : 'No'; ?></td>
-                    <td><?php echo $hotel['vote']; ?></td>
-                    <td><?php echo $hotel['distance_to_center']; ?> km</td>
+                    <th scope="col">HOTELS</th>
+                    <?php foreach ($hotels[0] as $key => $value) { ?>
+                        <th scope="col"><?php echo str_replace('_', ' ', Ucwords($key)) ?></th>
+                    <?php } ?>
                 </tr>
-            <?php } ?>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <?php foreach ($hotels as $i => $hotel) { ?>
+                    <tr>
+                        <th scope="row"><?php echo $i ?></th>
+                        <?php foreach ($hotel as $value) { ?>
+                            <td><?php echo $value; ?></td>
+                        <?php } ?>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
 
+    </div>
 </body>
 
 </html>
