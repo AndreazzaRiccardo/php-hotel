@@ -42,10 +42,10 @@ $hotels = [
 for ($i = 0; $i < count($hotels); $i++) {
     $hotels[$i]['distance_to_center'] .= ' km';
     $hotels[$i]['parking'] = $hotels[$i]['parking'] ? 'Yes' : 'No';
+    $hotels[$i]['vote'] .= ' / 5';
 }
 
-function filterHotels($parking_value, $vote_value)
-{
+function filterHotels($parking_value, $vote_value) {
     if (empty($_GET['vote']) && empty($_GET['parking'])) {
         return '';
     } elseif ($parking_value != $_GET['parking'] && !empty($_GET['parking'])) {
@@ -53,7 +53,7 @@ function filterHotels($parking_value, $vote_value)
     } elseif ($vote_value < $_GET['vote']) {
         return 'd-none';
     }
-}
+} 
 ?>
 
 <!DOCTYPE html>
@@ -90,9 +90,8 @@ function filterHotels($parking_value, $vote_value)
                 <select class="form-select form-select-sm" name="vote" id="vote">
                     <option value=""></option>
                     <?php for ($i = 1; $i <= 5; $i++) { ?>
-                        <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                        <option value="<?= $i; ?>"><?= $i; ?></option>
                     <?php } ?>
-
                 </select>
             </div>
             <button class="btn btn-dark" type="submit">FILTER</button>
@@ -105,16 +104,16 @@ function filterHotels($parking_value, $vote_value)
                 <tr>
                     <th scope="col">HOTELS</th>
                     <?php foreach ($hotels[0] as $key => $value) { ?>
-                        <th scope="col"><?php echo str_replace('_', ' ', Ucwords($key)) ?></th>
+                        <th scope="col"><?= str_replace('_', ' ', Ucwords($key)) ?></th>
                     <?php } ?>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($hotels as $i => $hotel) { ?>
-                    <tr class="<?php echo filterHotels($hotel['parking'], $hotel['vote']); ?>">
-                        <th scope="row"><?php echo $i ?></th>
+                    <tr class="<?= filterHotels($hotel['parking'], $hotel['vote']); ?>">
+                        <th scope="row"><?= $i ?></th>
                         <?php foreach ($hotel as $value) { ?>
-                            <td><?php echo $value; ?></td>
+                            <td><?= $value; ?></td>
                         <?php } ?>
                     </tr>
                 <?php } ?>
